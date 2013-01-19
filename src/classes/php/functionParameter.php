@@ -4,10 +4,12 @@ class plPhpFunctionParameter
 {
     private $properties;
 
-    public function __construct( $name, $type = null ) 
+    public function __construct( $name, $type = null, $reference = false ) 
     {
+        $namePrepend = ( $reference ) ? '&' : null;
+        
         $this->properties = array( 
-            'name'      =>  $name,
+            'name'      =>  $namePrepend.$name,
             'type'      =>  $type,
         );
     }

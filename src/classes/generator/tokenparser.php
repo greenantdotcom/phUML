@@ -29,6 +29,7 @@ class plStructureTokenparserGenerator extends plStructureGenerator
             'attributes'    => array(),
             'functions'     => array(),
             'typehint'      => null,
+            'reference'     => false,
             'params'        => array(),
             'implements'    => array(),
             'extends'       => null,
@@ -47,7 +48,7 @@ class plStructureTokenparserGenerator extends plStructureGenerator
         {
             $this->initParserAttributes();
             $tokens = token_get_all( file_get_contents( $file ) );
-
+            
             // Loop through all tokens
             foreach( $tokens as $token ) 
             {
@@ -58,6 +59,10 @@ class plStructureTokenparserGenerator extends plStructureGenerator
                     {
                         case ',':
                             $this->comma();
+                        break;
+
+                        case '&':
+                            $this->reference();
                         break;
 
                         case '(':
@@ -165,7 +170,7 @@ class plStructureTokenparserGenerator extends plStructureGenerator
             // Store interface or class in the parser arrays
             $this->storeClassOrInterface();
         }
-
+        
         // Fix the class and interface connections
         $this->fixObjectConnections();
 
@@ -177,6 +182,13 @@ class plStructureTokenparserGenerator extends plStructureGenerator
     {
         // Reset typehints on each comma
         $this->parserStruct['typehint'] = null;
+        $this->parserStruct['reference'] = false;
+    }
+
+    private function reference() 
+    {
+        // Reset typehints on each comma
+        $this->parserStruct['reference'] = true;
     }
 
     private function opening_bracket() 
@@ -261,6 +273,8 @@ class plStructureTokenparserGenerator extends plStructureGenerator
 
     private function t_variable( $token ) 
     {
+        $lastToken = $this->lastToken;
+        
         switch( $this->lastToken ) 
         {
             case T_PUBLIC:
@@ -278,10 +292,13 @@ class plStructureTokenparserGenerator extends plStructureGenerator
             break;
             case T_FUNCTION:
                 // A new function parameter
+                
                 $this->parserStruct['params'][] = array( 
                     $this->parserStruct['typehint'], 
-                    $token[1]
+                    $token[1],
+                    $this->parserStruct['reference']
                 );
+
             break;
         }
     }
@@ -520,9 +537,10 @@ class plStructureTokenparserGenerator extends plStructureGenerator
             {
                 // Create the needed parameter objects
                 $params = array();
+                
                 foreach( $function[2] as $param) 
                 {
-                    $params[] = new plPhpFunctionParameter( $param[1], $param[0] );
+                    $params[] = new plPhpFunctionParameter( $param[1], $param[0], $param[2] );
                 }
                 $functions[] = new plPhpFunction( 
                     $function[0],
@@ -553,7 +571,7 @@ class plStructureTokenparserGenerator extends plStructureGenerator
                 $params = array();
                 foreach( $function[2] as $param) 
                 {
-                    $params[] = new plPhpFunctionParameter( $param[1], $param[0] );
+                    $params[] = new plPhpFunctionParameter( $param[1], $param[0], $param[2] );
                 }
                 $functions[] = new plPhpFunction( 
                     $function[0],
