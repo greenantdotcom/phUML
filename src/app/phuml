@@ -14,7 +14,7 @@ HEADER;
 function showUsage() 
 {
     echo <<<USAGE
-Usage: phuml [-h|-l] [OPTIONS] <DIRECTORY> <PROCESSOR> [PROCESSOR OPTIONS] ... <OUTFILE>
+Usage: phuml [-h|-l] [OPTIONS] <DIRECTORY[,DIRECTORY…]> <PROCESSOR> [PROCESSOR OPTIONS] ... <OUTFILE>
 
 Commands:
     -h      Display this help text
@@ -22,6 +22,7 @@ Commands:
 
 Options: 
     -r      Scan given directorie recursively
+            Multiple directories can be passed in by separating them with commas
 
 Example:
     phuml -r ./ -graphviz -createAssociations false -neato out.png
@@ -127,9 +128,18 @@ function cmdDirOrFile()
     global $argc, $argv;
     global $phuml, $recursive;
 
-    if ( is_dir( $argv[0] ) ) 
+    if ( !empty( $argv[0] ) ) 
     {
-        $phuml->addDirectory( $argv[0], 'php', $recursive );
+		$dirs	=	array_filter(
+						explode( ',', $argv[0] )
+					);
+		
+		foreach( $dirs as $dir ){
+			if( is_readable( $dir ) ){
+				$phuml->addDirectory( $dir, null, $recursive );
+			}
+		}
+		
         updateArguments( 1 );
     }
     else

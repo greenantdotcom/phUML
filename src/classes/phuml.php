@@ -6,7 +6,13 @@ class plPhuml
     
     private $files;
     private $processors;
-
+    
+    /**
+      * The file extensions that the PHP processor should consider when looping through files
+      */
+    
+    public static $DEFAULT_EXTENSIONS = array( 'php', 'phps', 'phtml', 'inc', 'php5' );
+    
     public function __construct() 
     {
         $this->properties = array( 
@@ -21,19 +27,36 @@ class plPhuml
         $this->files[] = $file;
     }
 
-    public function addDirectory( $directory, $extension = 'php', $recursive = true ) 
+    function _generateFilenameRegexp( $extensions ){
+        if( !is_array( $extensions ) ){
+            $extensions = array( $extensions );
+        }
+        
+        $extensions    =    implode(
+                            '|',
+                            array_map( function( $s ){ return preg_quote( $s, '%' ); }, $extensions )
+                        );
+        
+        return "%.+\.({$extensions})$%";
+    }
+    
+    public function addDirectory( $directory, $extensions = null, $recursive = true ) 
     {
+        if( empty( $extensions ) ){
+            $extensions = self::$DEFAULT_EXTENSIONS;
+        }
+        
+        $regexp = $this->_generateFilenameRegexp( $extensions );
+        
         if ( $recursive === false ) 
         {
             $iterator = new DirectoryIterator( $directory );
         }
         else
         {
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator( $directory )
-            );
+            $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $directory ) );
         }
-
+        
         foreach( $iterator as $entry ) 
         {
             if ( $entry->isDir() === true ) 
@@ -41,15 +64,16 @@ class plPhuml
                 continue;
             }
             
-            if ( $sub = strtolower( substr( $entry->getFilename(), -1 * strlen( $extension ) ) ) !== strtolower( $extension ) ) 
-            {
+            $filename = basename( $entry->getFilename() );
+            
+            if( !preg_match( $regexp, $filename ) ){
                 continue;
             }
-
+            
             $this->files[] = $entry->getPathname();
-        }       
+        }   
     }
-
+    
     public function addProcessor( $processor ) 
     {
         if ( count( $this->processors ) === 0 ) 
