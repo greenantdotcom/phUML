@@ -284,13 +284,17 @@ class plGraphvizProcessor extends plProcessor
         return $relation;
     }
 
+    private function h( $text ){
+        return htmlentities( $text, ENT_QUOTES );
+    }
+
     private function createInterfaceLabel( $name, $attributes, $functions )     
     {
         // Start the table
         $label = '<<TABLE CELLSPACING="0" BORDER="0" ALIGN="LEFT">';
         
         // The title
-        $label .= '<TR><TD BORDER="' . $this->options->style->interfaceTableBorder . '" ALIGN="CENTER" BGCOLOR="' . $this->options->style->interfaceTitleBackground . '"><FONT COLOR="' . $this->options->style->interfaceTitleColor . '" FACE="' . $this->options->style->interfaceTitleFont . '" POINT-SIZE="' . $this->options->style->interfaceTitleFontsize . '">' . $name . '</FONT></TD></TR>';
+        $label .= '<TR><TD BORDER="' . $this->options->style->interfaceTableBorder . '" ALIGN="CENTER" BGCOLOR="' . $this->options->style->interfaceTitleBackground . '"><FONT COLOR="' . $this->options->style->interfaceTitleColor . '" FACE="' . $this->options->style->interfaceTitleFont . '" POINT-SIZE="' . $this->options->style->interfaceTitleFontsize . '">' . $this->h( $name ) . '</FONT></TD></TR>';
 
         // The attributes block
         $label .= '<TR><TD BORDER="' . $this->options->style->interfaceTableBorder . '" ALIGN="LEFT" BGCOLOR="' . $this->options->style->interfaceAttributesBackground . '">';
@@ -300,7 +304,7 @@ class plGraphvizProcessor extends plProcessor
         }
         foreach( $attributes as $attribute ) 
         {
-            $label .= '<FONT COLOR="' . $this->options->style->interfaceAttributesColor . '" FACE="' . $this->options->style->interfaceAttributesFont . '" POINT-SIZE="' . $this->options->style->interfaceAttributesFontsize . '">' . $attribute . '</FONT><BR ALIGN="LEFT"/>';
+            $label .= '<FONT COLOR="' . $this->options->style->interfaceAttributesColor . '" FACE="' . $this->options->style->interfaceAttributesFont . '" POINT-SIZE="' . $this->options->style->interfaceAttributesFontsize . '">' . $this->h( $attribute ) . '</FONT><BR ALIGN="LEFT"/>';
         }
         $label .= '</TD></TR>';
 
@@ -312,7 +316,7 @@ class plGraphvizProcessor extends plProcessor
         }
         foreach( $functions as $function ) 
         {
-            $label .= '<FONT COLOR="' . $this->options->style->interfaceFunctionsColor . '" FACE="' . $this->options->style->interfaceFunctionsFont . '" POINT-SIZE="' . $this->options->style->interfaceFunctionsFontsize . '">' . $function . '</FONT><BR ALIGN="LEFT"/>';
+            $label .= '<FONT COLOR="' . $this->options->style->interfaceFunctionsColor . '" FACE="' . $this->options->style->interfaceFunctionsFont . '" POINT-SIZE="' . $this->options->style->interfaceFunctionsFontsize . '">' . $this->h( $function ) . '</FONT><BR ALIGN="LEFT"/>';
         }
         $label .= '</TD></TR>';
 
@@ -328,7 +332,7 @@ class plGraphvizProcessor extends plProcessor
         $label = '<<TABLE CELLSPACING="0" BORDER="0" ALIGN="LEFT">';
         
         // The title
-        $label .= '<TR><TD BORDER="' . $this->options->style->classTableBorder . '" ALIGN="CENTER" BGCOLOR="' . $this->options->style->classTitleBackground . '"><FONT COLOR="' . $this->options->style->classTitleColor . '" FACE="' . $this->options->style->classTitleFont . '" POINT-SIZE="' . $this->options->style->classTitleFontsize . '">' . $name . '</FONT></TD></TR>';
+        $label .= '<TR><TD BORDER="' . $this->options->style->classTableBorder . '" ALIGN="CENTER" BGCOLOR="' . $this->options->style->classTitleBackground . '"><FONT COLOR="' . $this->options->style->classTitleColor . '" FACE="' . $this->options->style->classTitleFont . '" POINT-SIZE="' . $this->options->style->classTitleFontsize . '">' . $this->h( $name ) . '</FONT></TD></TR>';
 
         // The attributes block
         $label .= '<TR><TD BORDER="' . $this->options->style->classTableBorder . '" ALIGN="LEFT" BGCOLOR="' . $this->options->style->classAttributesBackground . '">';
@@ -338,7 +342,7 @@ class plGraphvizProcessor extends plProcessor
         }
         foreach( $attributes as $attribute ) 
         {
-            $label .= '<FONT COLOR="' . $this->options->style->classAttributesColor . '" FACE="' . $this->options->style->classAttributesFont . '" POINT-SIZE="' . $this->options->style->classAttributesFontsize . '">' . $attribute . '</FONT><BR ALIGN="LEFT"/>';
+            $label .= '<FONT COLOR="' . $this->options->style->classAttributesColor . '" FACE="' . $this->options->style->classAttributesFont . '" POINT-SIZE="' . $this->options->style->classAttributesFontsize . '">' . $this->h( $attribute ) . '</FONT><BR ALIGN="LEFT"/>';
         }
         $label .= '</TD></TR>';
 
@@ -350,7 +354,7 @@ class plGraphvizProcessor extends plProcessor
         }
         foreach( $functions as $function ) 
         {
-            $label .= '<FONT COLOR="' . $this->options->style->classFunctionsColor . '" FACE="' . $this->options->style->classFunctionsFont . '" POINT-SIZE="' . $this->options->style->classFunctionsFontsize . '">' . $function . '</FONT><BR ALIGN="LEFT"/>';
+            $label .= '<FONT COLOR="' . $this->options->style->classFunctionsColor . '" FACE="' . $this->options->style->classFunctionsFont . '" POINT-SIZE="' . $this->options->style->classFunctionsFontsize . '">' . $this->h( $function ) . '</FONT><BR ALIGN="LEFT"/>';
         }
         $label .= '</TD></TR>';
 
