@@ -130,13 +130,15 @@ function cmdDirOrFile()
 
     if ( !empty( $argv[0] ) ) 
     {
-		$dirs	=	array_filter(
-						explode( ',', $argv[0] )
-					);
+		$entries = array_filter( explode( ',', $argv[0] ) );
 		
-		foreach( $dirs as $dir ){
-			if( is_readable( $dir ) ){
-				$phuml->addDirectory( $dir, null, $recursive );
+		foreach( $entries as $entry ){
+			if( is_dir( $entry ) ){
+				$phuml->addDirectory( $entry, null, $recursive );
+			}
+			else
+			if( is_file( $entry ) ){
+				$phuml->addFile( $entry );
 			}
 		}
 		
@@ -214,6 +216,7 @@ try
     {
         cmdProcessor();
     }
+
     cmdOutFile();
 
     echo '[|] Running... (This may take some time)', "\n";
@@ -225,5 +228,3 @@ catch ( Exception $e )
     echo 'A fatal error occured during the process:', "\n";
     echo $e->getMessage(), "\n";
 }
-
-?>
