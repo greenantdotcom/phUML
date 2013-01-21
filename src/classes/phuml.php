@@ -70,8 +70,8 @@ class plPhuml
                 continue;
             }
             
-            $this->files[] = $entry->getPathname();
-        }   
+            $this->addFile( $entry->getPathname() );
+        }
     }
     
     public function addProcessor( $processor ) 
