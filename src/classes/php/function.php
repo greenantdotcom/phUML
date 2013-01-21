@@ -1,35 +1,16 @@
 <?php
 
-class plPhpFunction
-{
-    private $properties;
+require_once __DIR__.'/plPhpPropertyClass.php';
 
-    public function __construct( $name, $modifier = 'public', $params = array() ) 
+class plPhpFunction extends plPhpPropertyClass
+{
+    public function __construct( $name, $modifier = 'public', $params = array(), $namespace = null ) 
     {
         $this->properties = array( 
             'name'      =>  $name,
             'modifier'  =>  $modifier,
             'params'    =>  $params,
+            'namespace' =>  $namespace,
         );
     }
-
-    public function __get( $key )
-    {
-        if ( !array_key_exists( $key, $this->properties ) )
-        {
-            throw new plBasePropertyException( $key, plBasePropertyException::READ );
-        }
-        return $this->properties[$key];
-    }
-
-    public function __set( $key, $val )
-    {
-        if ( !array_key_exists( $key, $this->properties ) )
-        {
-            throw new plBasePropertyException( $key, plBasePropertyException::WRITE );
-        }
-        $this->properties[$key] = $val;            
-    }
 }
-
-?>

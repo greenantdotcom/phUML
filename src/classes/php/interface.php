@@ -1,35 +1,30 @@
 <?php
 
-class plPhpInterface
-{
-    private $properties;
+require_once __DIR__.'/plPhpPropertyClass.php';
 
-    public function __construct( $name, $functions = array(), $extends = null ) 
+class plPhpInterface extends plPhpPropertyClass
+{
+    public function __construct( $name, $functions = array(), $extends = null, $namespace = null ) 
     {
         $this->properties = array( 
             'name'      =>  $name,
             'functions' =>  $functions,
             'extends'   =>  $extends,
+            'namespace' =>  $namespace,
         );
     }
 
-    public function __get( $key )
-    {
-        if ( !array_key_exists( $key, $this->properties ) )
-        {
-            throw new plBasePropertyException( $key, plBasePropertyException::READ );
+    public function formattedName( $value ){
+        $ns = $this->namespace;
+        
+        if( !empty( $ns ) ){
+            if( $ns[0] <> '\\' ){
+                $ns = '\\'.$ns;
+            }
+            
+            $ns .= '\\';
         }
-        return $this->properties[$key];
-    }
-
-    public function __set( $key, $val )
-    {
-        if ( !array_key_exists( $key, $this->properties ) )
-        {
-            throw new plBasePropertyException( $key, plBasePropertyException::WRITE );
-        }
-        $this->properties[$key] = $val;            
+        
+        return $ns.$this->name;
     }
 }
-
-?>
