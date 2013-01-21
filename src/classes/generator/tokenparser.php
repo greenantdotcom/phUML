@@ -396,9 +396,8 @@ class plStructureTokenparserGenerator extends plStructureGenerator
             break;
             case T_EXTENDS:
                 // Set the superclass
-                $this->parserStruct['extends'] = $token[1];
+                $this->parserStruct['extends'] .= $token[1];
                 // Reset the last token
-                $this->lastToken = null;
             break;                        
             case T_FUNCTION:
                 // Add the current function only if there is no function name already
