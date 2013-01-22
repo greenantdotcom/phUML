@@ -7,3 +7,4 @@ Goals
 =====
 
 - Support references in method argument lists
+- Handle PHP 5.3+ features, such as namespaces (doc definitions use X, use X as Y), traits, etc.
