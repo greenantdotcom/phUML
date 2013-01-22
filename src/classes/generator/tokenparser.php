@@ -606,11 +606,15 @@ class plStructureTokenparserGenerator extends plStructureGenerator
                 {
                     $params[] = new plPhpFunctionParameter( $param[1], $param[0], $param[2] );
                 }
-                $functions[] = new plPhpFunction( 
-                    $function[0],
-                    $function[1],
-                    $params
-                );                                    
+                
+                if( !empty( $function[0] ) )
+                {
+                    $functions[] = new plPhpFunction( 
+                        $function[0],
+                        $function[1],
+                        $params
+                    );                                    
+                }
             }
             foreach ( $this->parserStruct['attributes'] as $attribute ) 
             {
